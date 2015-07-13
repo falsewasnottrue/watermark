@@ -2,26 +2,39 @@ package controllers
 
 import domain._
 
-import play.api._
 import play.api.mvc._
+import service.MockWatermarkService
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class WatermarkController extends Controller {
 
-  def book(title: String, author: String, topic: String) = Action {
-    val ticket = Ticket("4722")
+  val watermarkService = new MockWatermarkService
+
+  def book(title: String, author: String, topicName: String) = Action {
+    val topic = Topic.withName(topicName)
+    val book = Book(title, author, topic, None)
+
+    val ticket = watermarkService.generateWatermark(book)
     Ok(ticket.value)
   }
 
 
   def journal(title: String, author: String) = Action {
-    Ok
+    val journal = Journal(title, author, None)
+    val ticket = watermarkService.generateWatermark(journal)
+    Ok(ticket.value)
   }
 
-  def status(ticket: String) = Action {
-    Ok("FINISHED")
+  def status(ticketValue: String) = Action {
+    val status = watermarkService.status(Ticket(ticketValue))
+    Ok(status.toString)
   }
 
-  def retrieve(ticket: String) = Action {
-    Ok("DOCUMENT")
+  def retrieve(ticketValue: String) = Action.async {
+    watermarkService.retrieve(Ticket(ticketValue)).map {
+      case Some(document) => Ok(document.toString)
+      case None => NotFound
+    }
   }
 }
