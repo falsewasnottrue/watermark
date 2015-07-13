@@ -29,9 +29,7 @@ class MockWatermarkService extends WatermarkService {
 
     // schedule watermark generation
     system.scheduler.scheduleOnce(new FiniteDuration(100, TimeUnit.MILLISECONDS)) {
-      // TODO calculate watermark
-      val documentWithWatermark = document.withWatermark(Watermark("test"))
-      storage.put(ticket, documentWithWatermark)
+      storage.put(ticket, document.generateWatermark)
     }
 
     ticket

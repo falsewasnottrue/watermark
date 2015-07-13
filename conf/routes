@@ -3,13 +3,9 @@
 # ~~~~
 
 # Home page
-GET        /                                  controllers.Application.index
-
 GET        /book/:title/:author/:topic        controllers.WatermarkController.book(title: String, author: String, topic: String)
 GET        /journal/:title/:author            controllers.WatermarkController.journal(title: String, author: String)
-
 GET        /status/:ticket                    controllers.WatermarkController.status(ticket: String)
-
 GET        /document/:ticket                  controllers.WatermarkController.retrieve(ticket: String)
 
 # Map static resources from the /public folder to the /assets URL path
