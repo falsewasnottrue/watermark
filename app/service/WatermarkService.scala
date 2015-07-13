@@ -5,7 +5,6 @@ import java.util.concurrent.TimeUnit
 import domain._
 import domain.TicketStatus._
 
-import scala.concurrent.Future
 import play.api.libs.concurrent.Akka.system
 import scala.concurrent.duration.FiniteDuration
 
@@ -15,7 +14,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 trait WatermarkService {
   def generateWatermark(document: Document): Ticket
   def status(ticket: Ticket): TicketStatus
-  def retrieve(ticket: Ticket): Future[Option[Document]]
+  def retrieve(ticket: Ticket): Option[Document]
 }
 
 class MockWatermarkService extends WatermarkService {
@@ -46,6 +45,9 @@ class MockWatermarkService extends WatermarkService {
       case _ => Unknown
     }
 
-  def retrieve(ticket: Ticket): Future[Option[Document]] =
-    Future.successful(storage.get(ticket))
+  def retrieve(ticket: Ticket): Option[Document] =
+    storage.get(ticket) match {
+      case Some(document) if document.watermark.isDefined => Some(document)
+      case _ => None
+    }
 }

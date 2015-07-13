@@ -1,10 +1,5 @@
 
 import org.specs2.mutable._
-import org.specs2.runner._
-import org.junit.runner._
-
-import play.api.test._
-import play.api.test.Helpers._
 
 import domain._
 import domain.Topic._
@@ -41,7 +36,6 @@ class DomainSpec extends Specification {
       watermark must beSome[Watermark]
       watermark.get must equalTo(Watermark("{content:”book”, title:”How to make money”, author:”Dr. Evil”, topic:”Business”}"))
     }
-
 
     "create watermark for journals" in {
       // {content:”journal”, title:”Journal of human flight routes”, author:”Clark Kent”}

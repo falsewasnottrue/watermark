@@ -5,8 +5,6 @@ import domain._
 import play.api.mvc._
 import service.MockWatermarkService
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
 class WatermarkController extends Controller {
 
   val watermarkService = new MockWatermarkService
@@ -31,8 +29,8 @@ class WatermarkController extends Controller {
     Ok(status.toString)
   }
 
-  def retrieve(ticketValue: String) = Action.async {
-    watermarkService.retrieve(Ticket(ticketValue)).map {
+  def retrieve(ticketValue: String) = Action {
+    watermarkService.retrieve(Ticket(ticketValue)) match {
       case Some(document) => Ok(document.toString)
       case None => NotFound
     }

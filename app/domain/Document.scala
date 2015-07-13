@@ -2,7 +2,6 @@ package domain
 
 case class Watermark(value: String)
 
-
 object Topic extends Enumeration {
   type Topic = Value
   val Business, Science, Media = Value
