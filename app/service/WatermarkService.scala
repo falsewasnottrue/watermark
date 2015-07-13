@@ -24,7 +24,7 @@ class MockWatermarkService extends WatermarkService {
   // duration for "watermark generation"
   val delay: FiniteDuration = new FiniteDuration(100, TimeUnit.MILLISECONDS)
 
-  def generateWatermark(document: Document): Ticket = {
+  override def generateWatermark(document: Document): Ticket = {
     val ticket = Ticket(java.util.UUID.randomUUID.toString)
     // persist document without watermark
     storage.put(ticket, document)
@@ -38,14 +38,14 @@ class MockWatermarkService extends WatermarkService {
     ticket
   }
 
-  def status(ticket: Ticket): TicketStatus =
+  override def status(ticket: Ticket): TicketStatus =
     storage.get(ticket) match {
       case Some(document) if document.watermark.isDefined => Finished
       case Some(document) if document.watermark.isEmpty => Generating
       case _ => Unknown
     }
 
-  def retrieve(ticket: Ticket): Option[Document] =
+  override def retrieve(ticket: Ticket): Option[Document] =
     storage.get(ticket) match {
       case Some(document) if document.watermark.isDefined => Some(document)
       case _ => None
