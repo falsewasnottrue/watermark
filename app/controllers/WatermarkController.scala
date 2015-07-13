@@ -17,7 +17,6 @@ class WatermarkController extends Controller {
     Ok(ticket.value)
   }
 
-
   def journal(title: String, author: String) = Action {
     val journal = Journal(title, author, None)
     val ticket = watermarkService.generateWatermark(journal)
