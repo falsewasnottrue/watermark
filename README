@@ -22,4 +22,8 @@ c) Provide Unit-Tests to ensure the functionality of the service.
 
 Solution
 
-The application can be started with <code>activator</code>.
+The application can be started via `activator`. Tests can be run with `test`, the server can be started with `run`
+
+The described interface is implemented in the `WatermarkService` trait, an entire execution of the use case can be found in `IntegrationSpec`.
+
+For easier testing and demonstration, there is a web interface implemented in `WatermarkController` that exposes the functionality as a simple REST API.
