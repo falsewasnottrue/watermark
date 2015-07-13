@@ -47,7 +47,6 @@ class DomainSpec extends Specification {
       // {content:”journal”, title:”Journal of human flight routes”, author:”Clark Kent”}
       val journal = Journal("Journal of human flight routes", "Clark Kent", None)
 
-
       val watermark = journal.generateWatermark.watermark
       watermark must beSome[Watermark]
       watermark.get must equalTo(Watermark("{content:”journal”, title:”Journal of human flight routes”, author:”Clark Kent”}"))

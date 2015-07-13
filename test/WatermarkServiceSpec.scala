@@ -3,14 +3,7 @@ import play.api.{DefaultGlobal, GlobalSettings}
 import play.api.mvc.Handler
 import play.api.test.{WithApplication, FakeApplication}
 
-//import org.specs2.runner._
-//import org.junit.runner._
-//
-//import play.api.test._
-//import play.api.test.Helpers._
-
 import domain._
-//import domain.Topic._
 import domain.TicketStatus._
 
 import service.MockWatermarkService
@@ -41,7 +34,7 @@ class WatermarkServiceSpec extends Specification {
       val ticket = watermarkService.generateWatermark(document)
 
       // wait sufficiently long
-      Thread.sleep(500)
+      Thread.sleep(200)
 
       val status = watermarkService.status(ticket)
       status must beEqualTo(Finished)

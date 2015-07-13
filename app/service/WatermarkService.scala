@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit
 
 import domain._
 import domain.TicketStatus._
-import domain.Topic._
 
 import scala.concurrent.Future
 import play.api.libs.concurrent.Akka.system
@@ -23,12 +22,17 @@ class MockWatermarkService extends WatermarkService {
 
   val storage = scala.collection.mutable.Map[Ticket, Document]()
 
+  // duration for "watermark generation"
+  val delay: FiniteDuration = new FiniteDuration(100, TimeUnit.MILLISECONDS)
+
   def generateWatermark(document: Document): Ticket = {
     val ticket = Ticket(java.util.UUID.randomUUID.toString)
+    // persist document without watermark
     storage.put(ticket, document)
 
     // schedule watermark generation
-    system.scheduler.scheduleOnce(new FiniteDuration(100, TimeUnit.MILLISECONDS)) {
+    system.scheduler.scheduleOnce(delay) {
+      // after delay, "generate" watermark and substitute in storage
       storage.put(ticket, document.generateWatermark)
     }
 
@@ -43,5 +47,5 @@ class MockWatermarkService extends WatermarkService {
     }
 
   def retrieve(ticket: Ticket): Future[Option[Document]] =
-    Future.successful(Some(Book("title", "author", Business, None)))
+    Future.successful(storage.get(ticket))
 }
